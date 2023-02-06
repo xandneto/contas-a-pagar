@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miransoft - Contas a Pagar - Pagamento de Contas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" a href="css/style.css">
+    <img src="img/logomiran.png" id="logo" width="256em" height="56em" alt="logo">
+    <script src="js/jquery-3.6.3.js"></script>
+</head>
+<body>
+    <form class="formdata" method="post" id="formpag" >
+        
+        <div>
+            <input class="inputtext" type="hidden" id="id" name="id">
+         <span>Valor da Conta</span><br>   <input class="inputtext" type="number" step="0.01" readonly id="valor" name="valor">
+        </div>
+        <div>
+           
+         <span>Juros</span><br>    <input  id="juros" name="juros"  class="inputtext" type="number" 
+         step="0.01" value="0" >
+        </div>
+        <div>
+           
+            <span>Multa</span><br>   <input  id="multa" name="multa"  class="inputtext" type="number" step="0.01"
+             value="0" >
+           </div>
+           <div>
+           
+            <span>Total a Pagar</span><br>   <input  class="inputtext" type="text"
+             step="0.01"  id="total_pago" name="total_pago" readonly>
+           </div>
+           <div>
+           
+            <span>Data Pagamento</span><br>   
+            <input class="inputtext" type="date"   id="data_pagamento"  name="data_pagamento" required>
+           </div>
+           <div>
+           
+          <input class="btn_cadastra" type="submit"   id="btn_paga" name="btn_paga" value="Confirmar Pagamento">
+           </div>
+
+
+    </form>
+  
+    <script>
+        let params = new URLSearchParams(document.location.search);
+        document.querySelector('#valor').value = params.get("valor");
+        document.querySelector("#id").value = params.get("id");
+     
+
+
+        
+       $('#total_pago').click 
+       (function()
+        {
+
+       var juros = parseFloat(document.getElementById("juros").value);
+       var multa = parseFloat(document.getElementById("multa").value);
+       var total_pago = parseFloat(document.getElementById("valor").value) + juros + multa;
+       
+      $('#total_pago').attr('value',total_pago);
+
+
+       })
+
+/* envio do formulario */
+
+const formdata = document.querySelector("#formpag");
+       
+       formdata.addEventListener('submit',(e)=>{
+           e.preventDefault();
+           const dadosForm = new FormData(formdata);
+           fetch('http://localhost/cp/php/pagaconta.php',{method:"POST",
+       body: dadosForm})
+           .then(resp => resp.text())
+           .then(data => {                      
+               
+               var status = JSON.parse((data)).status;
+                             
+               if (status == "sucesso"){
+                    alert("Pagamento Registrado com Sucesso");
+                    window.location.href = "http://localhost/cp/main.html";}
+                    else
+                    alert(status);
+                    
+                                       
+           })
+           ;
+       })
+        
+        
+/*
+ducument.getElementById("juros").text   = "0.00";
+ducument.getElementById("multa").text = "0.00";
+document.getElementById("valor").text = params.get("valor");
+
+  */      
+    </script>
+</body>
+</html>

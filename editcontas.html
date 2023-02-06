@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miransoft - Editar Contas a  Pagar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" a href="css/style.css">
+    <img src="img/logomiran.png" id="logo" width="256em" height="56em" alt="logo">
+    <script src="js/jquery-3.6.3.js"></script>
+</head>
+<form method="get"   action="http://localhost/cp/pagaconta.html"  class="formdata" id="formeditcontas">
+    
+    <div>
+        <span>Credor:</span><br>
+        <select id="id_credor" name="id_credor">
+            
+        </select>
+    </div>
+    <div>
+        <span>Id</span><br>
+        <input class="inputtext" type="number" id="id" name="id" readonly>
+    </div>
+
+        <div>
+        <input type="number" step="0.01"  id="valor" name="valor" class="inputtext" placeholder="valor da conta">
+    </div>
+    <div>
+        <span>Vencimento:</span><br>
+        <input type="date" id="vencimento" name="vencimento"  class="inputtext">
+    </div>
+    <div>
+        <input type="text" id="descricao" name="descricao" class="inputtext" placeholder="Descrição">
+    </div>
+    <div>
+    <span>Data da Compra:</span><br>
+    <input type="date" id="data_compra" name="data_compra"  class="inputtext">
+</div>
+<div>
+    <input class="inputtext" type="text" name="documento" id="documento" class="inputtext" placeholder="Número Doc" >
+   </div>
+   <div>
+    <select id="carteira" name="carteira">
+        <option>Cheque</option>
+        <option>Cobrança Bancária</option>
+        <option>PIX</option>
+        <option>Transferência Bancária</option>
+        <option>Espécie</option>
+    </select>
+   </div>
+<div>
+    <input type="submit"  id="btn_paga" class="btn_cadastra"  value="Efetuar Pagamento">
+    </div>
+    <div>
+        <input type="button" onclick="altera()" id="btn_cadastra" class="btn_cadastra" value="Alterar ">
+
+        </div>
+
+        <div>
+            <input type="button"  onclick="exclui()" id="btn_excelui" class="btn_cadastra" value="Excluir ">
+            
+            </div>
+
+</form>
+<script>
+
+
+
+
+/*
+    $("#vencimento").focusin(
+        function(){
+            $(this).attr('type','date')
+
+        }
+    )
+    $("#data_compra").focusin(
+        function(){
+            $(this).attr('type','date')
+
+        }
+    )*/
+
+
+    let params = new URLSearchParams(document.location.search);
+    document.getElementById("id").value = params.get("id");
+    document.getElementById("valor").value = params.get("valor");
+   // 
+    document.getElementById("descricao").value = params.get("descricao");
+    document.getElementById("carteira").value = params.get("carteira");
+    document.getElementById("documento").value = params.get("numero_doc");
+  //   params.get("data_compra");
+
+  let vencimento = params.get("vencimento");
+  let ano = vencimento.substring(6,10);
+  let mes = vencimento.substring(3,5);
+  let dia = vencimento.substring(0,2);
+  
+
+  document.getElementById("vencimento").value = ano+"-"+mes+"-"  + dia ;
+
+  let data_compra = params.get("data_compra");
+  ano = data_compra.substring(6,10);
+  mes = data_compra.substring(3,5);
+  dia = data_compra.substring(0,2);
+  document.getElementById("data_compra").value = ano + "-" + mes + "-" + dia;
+
+    if (params.get('status')==="Pago"){
+        
+      document.getElementById("btn_paga").type = "hidden";
+      document.getElementById("formeditcontas").insertAdjacentHTML('beforeend',"<div><span>Conta Paga</span></div>");
+    }
+
+    const fornecedor = document.getElementById("id_credor");
+      if (fornecedor){
+        listafornecedores();
+        
+      }
+
+      
+
+for (var i = 0; i < fornecedor.options.length; i++) {
+    if (fornecedor.options[i].value === params.get("id_credor")) {
+        fornecedor.selectedIndex = i;
+        break;
+    }
+}
+
+
+
+async function listafornecedores(){
+      const dados = await fetch("http://localhost/cp/php/listcredores.php");
+      const resposta = await dados.json();
+      if (resposta['status']=="sucesso"){
+
+        for (var i=0;i<resposta.dados.length;i++){
+            fornecedor.innerHTML = fornecedor.innerHTML + '<option value="' + resposta.dados[i]['id'] + '">' +
+                resposta.dados[i]['razao_social'] + "</option>";
+        }
+
+      }else{
+
+        document.getElementById("msgalerta").innerHTML = resposta['message'];
+
+      }
+
+    }
+
+function exclui(){
+    if (confirm("Atenção! A conta será excluída. Deseja Prosseguir?")){
+      const formdata = document.querySelector("#formeditcontas");
+       
+      
+           const dadosForm = new FormData(formdata);
+           fetch('http://localhost/cp/php/excluiconta.php',{method:"POST",
+       body: dadosForm})
+           .then(resp => resp.text())
+           .then(data => {                      
+               
+               var status = JSON.parse((data)).status;
+                             
+               if (status == "sucesso"){
+                    alert("Conta Excluída com Sucesso");
+                    window.location.href = "http://localhost/cp/main.html";}
+                    else
+                    alert(status);
+                    
+                                       
+           })
+           ;
+       }
+  
+
+    }
+
+    function altera(){
+    if (confirm("Atenção! Confirma a alteração?")){
+      const formdata = document.querySelector("#formeditcontas");
+       
+      
+           const dadosForm = new FormData(formdata);
+           fetch('http://localhost/cp/php/alteracontas.php',{method:"POST",
+       body: dadosForm})
+           .then(resp => resp.text())
+           .then(data => {                      
+               
+               var status = JSON.parse((data)).status;
+                             
+               if (status == "sucesso"){
+                    alert("Conta alterada com Sucesso");
+                    window.location.href = "http://localhost/cp/main.html";}
+                    else
+                    alert(status);
+                    
+                                       
+           })
+           ;
+       }
+  
+
+    }
+
+
+</script>
+<body>
+    
+</body>
+</html>

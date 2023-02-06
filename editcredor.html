@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Credor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" a href="css/style.css">
+    <img src="img/logomiran.png" id="logo" width="256em" height="56em" alt="logo">
+</head>
+<body>
+    <form class="formdata" id="formcredor">
+        <input type="hidden" id="id" name="id">
+        <div>
+            <input type="text" class="inputtext" required id="razao_social" name="razao_social" placeholder="nome completo ou razão social">
+        </div>
+        <div>
+            <input type="number" class="inputtext" id="cnpj" name="cnpj" maxlength="14" placeholder="CPF ou CNPJ"> 
+        </div>
+        <div>
+            <input type="text" class="inputtext" id="logradouro" name="logradouro" placeholder="Rua, Avenida, Travessa, alameda ..."> 
+        </div>
+        <div>
+            <input type="text" class="inputtext" id="complemento" name="complemento" placeholder="Bloco, Ap, Loja ...">
+        </div>
+        <div>
+            <input type="text" class="inputtext" id="numero" name="numero" placeholder="número">
+        </div>
+        <div>
+            <input type="text" class="inputtext"  placeholder="digite nome do bairro" id="bairro" name="bairro">  
+        </div>
+        <div>
+            <input type="text" class="inputtext" placeholder="digite nome da cidade" id="cidade" name="cidade">  
+        </div>
+        <div>
+            <input type="number" placeholder="CEP digite apenas números" id="cep" name="cep" class="inputtext">    
+        </div>
+        <div>
+            <input type="email" class="inputtext" id="e_mail" placeholder="digite o e-mail" name="e_mail">  
+        </div>
+        <div>
+            <select id="estado" name="estado">
+                <option value="PE">Pernambuco</option>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AM">Amazonas</option>
+                <option value="AP">Amapá</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="PA">Pará</option>
+                <option value="PI">Piauí</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SE">Sergipe</option>
+                <option value="SP">São Paulo</option>
+                <option value="TO">Tocantins</option>
+            </select>
+        </div>
+        <div>
+            <input type="submit" id="btn_cadastra" class="btn_cadastra" name="btn_cadastra" value="Alterar">
+        </div>
+        <div>
+            <input type="button" onclick="excluicredor()" id="btn_exclui" class="btn_exclui" value="Delete" title="Excluir"></button>
+        </div>
+    </form>
+    <script>
+let params = new URLSearchParams(document.location.search);
+    document.getElementById("razao_social").value = params.get("razao_social");
+    document.getElementById("e_mail").value = params.get("e_mail");
+    document.getElementById("logradouro").value = params.get("logradouro");
+    document.getElementById("complemento").value = params.get("complemento");
+    document.getElementById("numero").value = params.get("numero");
+    document.getElementById("bairro").value = params.get("bairro");
+    document.getElementById("cidade").value = params.get("cidade");
+    document.getElementById("id").value = params.get("id");
+    document.getElementById("cnpj").value = params.get("cnpj");
+
+    const estado = document.querySelector("#estado");
+
+
+    for (var i=0;i<estado.options.length;i++){
+        if (estado.options[i].value === params.get("estado")){
+            estado.selectindex = i;
+            break;
+
+        }
+    }
+
+
+        const formdata = document.querySelector("#formcredor");
+       
+        formdata.addEventListener('submit',(e)=>{
+            e.preventDefault();
+            const dadosForm = new FormData(formdata);
+            fetch('http://localhost/cp/php/alteracredor.php',{method:"POST",
+        body: dadosForm})
+            .then(resp => resp.text())
+            .then(data => {                      
+                
+                var status = JSON.parse((data)).status;
+                
+                if (status == "sucesso"){
+                     alert("Alterado com Sucesso");
+                     window.location.href = "http://localhost/cp/main.html";}
+                     else
+                     alert("Erro ao tentar incluir");
+                     
+                                        
+            })
+            ;
+        });
+
+        function excluicredor(){
+if (confirm("O fornecedor será excluído. Deseja prosseguir?"))
+{
+    const dadosForm = new FormData(formdata);
+            fetch('http://localhost/cp/php/excluicredor.php',{method:"POST",
+        body: dadosForm})
+            .then(resp => resp.text())
+            .then(data => {                      
+                
+                var status = JSON.parse((data)).status;
+                
+                if (status == "sucesso"){
+                     alert("Excluído com Sucesso");
+                     window.location.href = "http://localhost/cp/main.html";}
+                     else
+                     alert("Erro ao tentar excluir");
+                     
+                                        
+            })
+            ;
+
+}
+
+        }
+
+
+
+    </script>
+</body>
+</html>

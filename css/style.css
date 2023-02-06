@@ -1,0 +1,226 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h3 {
+    font-family: Roboto, Helvetica, sans-serif;
+}
+
+.menu ul li {
+    background-color: white;
+    color: black;
+    float: left;
+    width: 150px;
+    
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    font-family: Roboto, Helvetica, sans-serif;
+    line-height: 40px;
+    font-size: 15px;
+    
+
+}
+.menu ul li:hover{
+    background-color: rgb(36, 128, 233);
+    color: white;
+    cursor: pointer;
+}
+
+.menu ul ul{
+    display: none;
+}
+.menu ul li:hover > ul{
+    display: block;
+    cursor: pointer;
+}
+
+.menu ul ul li a{
+    text-decoration: none;
+    color: rgb(233, 9, 9);
+}
+body{
+    background-color: rgb(190, 184, 184);
+}
+h3 {
+    text-align: center;
+}
+
+.formdata {
+    border-radius: 5px;
+    background-color: white;
+    text-align: left;
+    max-width: 400px;
+    width: 70%;
+    padding: 5px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    
+}
+
+.inputtext {
+    border-radius: 5px;
+    max-width: 400px;
+    width: 95%;
+    margin: 5px;
+    height: 40px;
+    
+}
+
+
+
+.inputtext:hover{
+    background-color: aqua;
+    cursor: pointer;
+}
+
+select {
+   
+    width: 95%;
+    height: 40px;
+    margin: 5px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.lbchk {
+
+    padding: 5px;
+    font-family: Roboto,sans-serif;
+    height: 40px;
+}
+
+select:hover{
+    background-color: cadetblue;
+    cursor: pointer;
+    
+
+}
+
+.btn_exclui:hover{
+ background-color: red;   
+ cursor: pointer;
+}
+
+.btn_exclui {
+    border-radius: 5px;
+    max-width: 400px;
+    width: 95%;
+    padding: 0px;
+    margin: 5px;
+    height: 40px;
+    font-family: Roboto,serif;
+   
+    color: #000;
+    
+    
+}
+
+button:hover{
+    background-color: cadetblue;
+    cursor: pointer;
+
+}
+
+.menu ul {
+    background-color: white;
+}
+
+#tabcredores {
+    border-radius: 5px;
+    border: 1px solid black;
+    max-width: 500px;
+    width: 70%;
+    padding: 20px;
+    position: absolute;
+    left: 50%;
+    
+    transform: translate(-50%);
+}
+
+.tabs {
+    border-radius: 5px;
+    border: 1px solid black;
+    max-width: 500px;
+    width: 70%;
+    padding: 20px;
+    position: absolute;
+    left: 50%;
+    
+    transform: translate(-50%);
+}
+
+
+.tdcab {
+    border: 2px black;
+    border-radius: 5px;
+    background-color: blue;
+    color: white;
+    padding: 5px;
+    font-family: Roboto,sans-serif;
+    
+}
+
+  
+
+
+
+.tddet {
+    border: 2px black;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    padding: 5px;
+    font-family: Roboto,sans-serif;
+    
+}
+
+span {
+    font-family: Roboto,sans-serif;
+
+}
+
+.tddet:hover{
+    background-color: rgb(184, 184, 219);
+    color: white;
+}
+
+.btn_cadastra {
+    border-radius: 5px;
+    max-width: 400px;
+    width: 95%;
+    padding: 0px;
+    margin: 5px;
+    height: 40px;
+ }
+
+#btn_contas {
+    border-radius: 5px;
+    max-width: 400px;
+    width: 95%;
+    padding: 0px;
+    margin: 5px;
+    height: 40px;
+    
+
+}
+
+
+#btn_contas:hover{
+    background-color: rgb(98, 98, 102);
+    cursor: pointer;
+}
+
+.btn_cadastra:hover{
+    background-color: rgb(98, 98, 102);
+    cursor: pointer;
+    color: white;
+}
+
+a {
+    text-decoration: none;
+}

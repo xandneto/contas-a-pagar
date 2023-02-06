@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miransoft - Contas a Pagar - Relação de Credores</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" a href="css/style.css">
+    <img src="img/logomiran.png" id="logo" width="256em" height="56em" alt="logo">
+</head>
+<body>
+    
+    <h3>Relação de Credores</h3>
+    <br>
+    <table id="tabcredores">
+        <tr >
+            <td class="tdcab">Id</td>
+            <td class="tdcab">Nome ou Razão Social</td>
+            <script>
+                montaTabela();
+
+                async function montaTabela(){
+                   
+                const credores = document.getElementById("tabcredores");
+                const dados = await   fetch('http://localhost/cp/php/listcredores.php');
+                
+                const resposta = await dados.json();
+                if (resposta['status']=="sucesso"){
+
+for (var i=0;i<resposta.dados.length;i++){
+    credores.innerHTML = credores.innerHTML + '<tr><td class="tddet">' +
+        '<a href="editcredor.html?id='  +  resposta.dados[i]['id'] +
+        '&razao_social=' + resposta.dados[i]['razao_social'] +
+        '&cnpj=' + resposta.dados[i]['cnpj'] +
+        '&logradouro=' + resposta.dados[i]['logradouro'] +
+        '&complemento=' + resposta.dados[i]['complemento'] +
+        '&numero=' + resposta.dados[i]['numero'] +
+        '&bairro=' + resposta.dados[i]['bairro'] +
+        '&cidade=' + resposta.dados[i]['cidade'] +
+        '&cep=' + resposta.dados[i]['cep'] +
+        '&e_mail=' + resposta.dados[i]['e_mail'] +'">' + resposta.dados[i]['id']
+         + '</a></td><td class="tddet">' +
+        resposta.dados[i]['razao_social'] + "</td></tr>";  // 
+}
+        }}
+
+                    </script>
+                   </tr>
+                
+    </table>
+                     
+                       
+</body>
+</html>

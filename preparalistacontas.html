@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miransoft - Contas a Pagar - Listagem</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" a href="css/style.css">
+    <img src="img/logomiran.png" id="logo" width="256em" height="56em" alt="logo">
+</head>
+<body>
+    <form method="get" id="formlistcontas" action="http://localhost/cp/listacontas.html" class="formdata">
+        
+            
+
+                    <div>
+                        <label class="lbchk">Data Inicial:<input type="date" id="data_inicial" name="data_inicial" 
+                            class="inputtext" required></label>
+
+                    </div>
+                    <div>
+                        <label class="lbchk">Data Final  :<input type="date" id="data_final" onblur="validaperiodo()" name="data_final" 
+                            class="inputtext" required></label>
+
+                    </div>
+                    
+                        
+                        <div>
+                            <select id="opcao" name="opcao">
+                                <option>Pagas</option>
+                                <option>A Pagar</option>
+                                <option>Todas</option>
+                            </select>
+                        </div>
+                                     
+                   <div>
+                    <input type="submit" class="btn_cadastra" value="Listar">
+                   </div>
+
+
+    </form>
+    <script>
+/*
+** Verifica se o intervalo de datas está correto
+*/
+
+params = new URLSearchParams(document.location.search);
+// verifica opção 
+// opçao 1 lista somente pagas
+// opção 2 lista somente em ser
+// opção 3 lista todas
+var op = params.get("op");
+
+function validaperiodo()
+{
+    const dataini = document.getElementById("data_inicial").value;
+    const datafinal = document.getElementById("data_final").value;
+if (dataini>datafinal) {
+   
+    alert("Data Inicial maior que data final!")
+    return false;
+}}
+
+
+        
+    </script>
+</body>
+</html>

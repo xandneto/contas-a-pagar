@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miransoft - Contas a Pagar - Inclusão</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" a href="css/style.css">
+    <img src="img/logomiran.png" id="logo" width="256em" height="56em" alt="logo">
+</head>
+<body>
+    <form class="formdata" id="formcontas">
+        
+        <div>
+            <span>Credor:</span><br>
+            <select id="id_credor" name="id_credor">
+                <option value=""></option>
+            </select>
+        </div>
+        <div>
+            <input type="number" step="0.01"  id="valor" name="valor" class="inputcurrency" placeholder="valor da conta">
+        </div>
+        <div>
+            <span>Vencimento:</span><br>
+            <input type="date" id="vencimento" name="vencimento" class="inputtext">
+        </div>
+        <div>
+            <input type="text" id="descricao" name="descricao" class="inputtext" placeholder="Descrição">
+        </div>
+        <div>
+        <span>Data da Compra:</span><br>
+        <input type="date" id="data_compra" name="data_compra" class="inputtext">
+    </div>
+    <div>
+        <input class="inputtext" type="text" name="documento" id="documento" class="inputtext" placeholder="Número Doc" >
+       </div>
+       <div>
+        <select id="carteira" name="carteira">
+            <option>Cheque</option>
+            <option>Cobrança Bancária</option>
+            <option>PIX</option>
+            <option>Transferência Bancária</option>
+            <option>Espécie</option>
+        </select>
+       </div>
+    <div>
+        <input type="submit" id="btn_cadastra" class="btn_cadastra" value="Cadastrar">
+        </div>
+    </form>
+    <script>
+              const credor = document.getElementById("id_credor");
+      if (credor){
+        listacredores();
+      }
+
+      async function listacredores(){
+      const dados = await fetch("http://localhost/cp/php/listcredores.php");
+      const resposta = await dados.json();
+      if (resposta['status']=="sucesso"){
+
+        for (var i=0;i<resposta.dados.length;i++){
+            credor.innerHTML = credor.innerHTML + '<option value="' + resposta.dados[i]['id'] + '">' +
+                resposta.dados[i]['razao_social'] + "</option>";
+        }
+
+      }else{
+
+        document.getElementById("msgalerta").innerHTML = resposta['message'];
+
+      };
+
+    }
+    const formdata = document.querySelector("#formcontas");
+       
+       formdata.addEventListener('submit',(e)=>{
+           e.preventDefault();
+           const dadosForm = new FormData(formdata);
+           fetch('http://localhost/cp/php/incluicontas.php',{method:"POST",
+       body: dadosForm})
+           .then(resp => resp.text())
+           .then(data => {                      
+               
+               var status = JSON.parse((data)).status;
+                             
+               if (status == "sucesso"){
+                    alert("Incluído com Sucesso");
+                    window.location.href = "http://localhost/cp/main.html";}
+                    else
+                    alert(status);
+                    
+                                       
+           })
+           ;
+       })
+
+
+
+    </script>
+</body>
+</html>

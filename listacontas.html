@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miransoft - Contas a Pagar - Listagem</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" a href="css/style.css">
+    <img src="img/logomiran.png" id="logo" width="256em" height="56em" alt="logo">
+</head>
+<body id="body">
+    <table class="tabs" id="tabcontas">
+        <tr>
+            <td class="tdcab">Id</td>
+            <td class="tdcab">Valor</td>
+            <td class="tdcab">Data Compra</td>
+            <td class="tdcab">Vencimento</td>
+            <td class="tdcab">Credor</td>
+            <td class="tdcab">Status</td>
+            <td class="tdcab">Data Status</td>
+        </tr>
+    </table>
+    <script >
+
+let params = new URLSearchParams(document.location.search);
+let data_inicial = params.get("data_inicial");
+let data_final = params.get("data_final") ;
+let opcao = params.get("opcao");
+
+
+
+
+
+const credores = document.querySelector("#tabcontas");
+
+montalista(data_inicial,data_final,opcao);
+
+async function montalista(data_inicial,data_final,opcao){
+    const contas = document.getElementById("tabcontas");
+    const dados = await   fetch('http://localhost/cp/php/listcontas.php?data_inicial='+
+    data_inicial + '&data_final=' + data_final + '&opcao=' + opcao );
+    const resposta = await dados.json();
+    var valor_total = 0;
+                if (resposta['status']=="sucesso"){
+                    for (var i=0;i<resposta.dados.length;i++){
+    credores.innerHTML = credores.innerHTML + '<tr><td class="tddet">' +
+        '<a href="editcontas.html?id='  +  resposta.dados[i]['id'] +
+        '&id_credor=' + resposta.dados[i]['id_credor'] +
+        '&valor=' + resposta.dados[i]['valor'] +
+        '&vencimento=' + resposta.dados[i]['vencimento'] +
+        '&numero_doc=' + resposta.dados[i]['numero_doc'] +
+        '&carteira=' + resposta.dados[i]['carteira'] +
+        '&descricao=' + resposta.dados[i]['descricao'] +
+        '&razao_social=' + resposta.dados[i]['razao_social'] +
+        '&status=' + resposta.dados[i]['status_descricao'] +
+        '&data_compra=' + resposta.dados[i]['data_compra'] +
+         '">' + resposta.dados[i]['id']
+         + '</a></td><td class="tddet">' +
+        parseFloat(resposta.dados[i]['valor']).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) + '</td>' +
+        '<td class="tddet">' + resposta.dados[i]['data_compra']      + "</td>" +
+        '<td class="tddet">' + resposta.dados[i]['vencimento']       + "</td>" + 
+        '<td class="tddet">' + resposta.dados[i]['razao_social']     + "</td>" + 
+        '<td class="tddet">' + resposta.dados[i]['status_descricao'] + "</td>" + 
+        '<td class="tddet">' + resposta.dados[i]['data_status']      + "</td></tr>"; 
+        valor_total = valor_total + parseFloat(resposta.dados[i]['valor']);
+
+}
+credores.insertAdjacentHTML('beforeend','<tr><td class="tddet">Total</td><td class="tddet">'  + valor_total.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}) + '</td></tr>');
+
+}}
+
+
+
+    </script>
+</body>
+</html>
